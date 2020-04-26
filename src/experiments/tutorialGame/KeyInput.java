@@ -40,7 +40,7 @@ public class KeyInput extends KeyAdapter {
                 if(key == KeyEvent.VK_S) tempObject.setVelY(0);
                 if(key == KeyEvent.VK_A) tempObject.setVelX(0);
                 if(key == KeyEvent.VK_D) tempObject.setVelX(0);
-//                if(key == KeyEvent.VK_SHIFT) handler.addObject(new Bullet(tempObject.getX()+16,tempObject.getY()+16, ID.Bullet, tempObject.getVelX(), tempObject.getVelY()));
+                if(key == KeyEvent.VK_SHIFT) handler.addObject(new Bullet(tempObject.getX()+16,tempObject.getY()+16, ID.Bullet, tempObject.getVelX(), tempObject.getVelY()));
             }
 
         }

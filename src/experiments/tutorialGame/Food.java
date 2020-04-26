@@ -16,11 +16,14 @@ public class Food extends GameObject {
         timer = new Timer();
         r = new Random();
 
+
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
                 if(countFood() < 7)
-                handler.addObject(new Food(r.nextInt(Game.WIDTH), r.nextInt(Game.HEIGHT), ID.Food, handler));
+
+                spawnFood();
+
             }
         }, 2000);
 

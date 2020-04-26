@@ -24,13 +24,20 @@ public class Game extends Canvas implements Runnable {
         new Window(WIDTH, HEIGHT, "Let's Build a Game!", this);
         hud = new HUD();
         handler.addObject(new Player(WIDTH/2-32, HEIGHT/2-32, ID.Player, handler));
-        handler.addObject(new BasicEnemy(0, HEIGHT/2+20, ID.BasicEnemy, handler));
-        handler.addObject(new BasicEnemy(WIDTH/2-32, 0, ID.BasicEnemy, handler));
-        handler.addObject(new BasicEnemy(100, HEIGHT/2+20, ID.BasicEnemy, handler));
+//        handler.addObject(new BasicEnemy(84, HEIGHT/2+90, ID.BasicEnemy, handler));
+//        handler.addObject(new BasicEnemy(WIDTH/2-32, 4, ID.BasicEnemy, handler));
+//        handler.addObject(new BasicEnemy(100, HEIGHT/2+21, ID.BasicEnemy, handler));
         handler.addObject(new Food(WIDTH/2, HEIGHT/2, ID.Food, handler));
+        handler.addObject(new Block(100, 100));
+        handler.addObject(new Block(200, 200));
         handler.addObject(new Block(300, 300));
-    }
+        handler.addObject(new Block(400, 400));
+        handler.addObject(new Block(500, 500));
+        handler.addObject(new Block(600, 600));
+        handler.addObject(new Block(700, 700));
+        handler.addObject(new Block(800, 800));
 
+    }
 
     public synchronized void start() {
         thread = new Thread(this);
