@@ -4,6 +4,8 @@ import java.awt.*;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.Vector;
 
@@ -12,28 +14,34 @@ public class Player extends GameObject{
     Random r = new Random();
     Handler handler;
     private Rectangle lastBounds;
+    public Map<String, Integer> input = new HashMap<>(); //velX, velY, -1 = down/left, 0 = neutral, 1 = up/right
+
     public Player(int x, int y, ID id, Handler handler) {
         super(x, y, id);
         this.handler = handler;
+        input.put("velX", 0);
+        input.put("velY", 0);
     }
 
     @Override
     public void tick() {
-        for(int i = 0; i < Math.abs(velX); i++){
+        if(velX != input.get("velX")){
+            if(input.get("velX") == 0 && velX != 0) velX = Math.min(Math.abs(velX + 1), Math.abs(velX -1)); //If velX is 0, it will decrease realVelX until it reaches 0
+            else velX += input.get("velX") > 0 ? 1 : -1; //Increases or decreases velX by 1 per tick, until it reaches 5, -5, or 0 depending.
             onCollision();
-            x += velX > 0 ? 1 : -1;
         }
-
-        for(int i = 0; i < Math.abs(velY); i++){
+        if(velY != input.get("velY")){
+            if(input.get("velY") == 0 && velY != 0) velY = Math.min(Math.abs(velY + 1), Math.abs(velY -1));
+            else velY += input.get("velY") > 0 ? 1 : -1;
             onCollision();
-            y += velY > 0 ? 1 : -1;
         }
-
+        x += velX;
+        y += velY;
         x = Game.clamp(x, 0, Game.WIDTH-47);
         y = Game.clamp(y, 0, Game.HEIGHT-70);
 
-
-        if(velX != 0 || this.velY != 0) handler.addObject(new Trail(x, y, ID.Trail, Color.white, 32, 32, 0.04f, this.handler));
+//        System.out.println("velX: " + input.get("velX") + " velY: " + input.get("velY"));
+        //if(velX != 0 || this.velY != 0) handler.addObject(new Trail(x, y, ID.Trail, Color.white, 32, 32, 0.01f, this.handler));
     }
     private void onCollision() {
 
@@ -75,13 +83,14 @@ public class Player extends GameObject{
 
     private void onBlockCollision(GameObject block, Rectangle lastBounds){
         if(getBounds().intersects(block.getBounds())) {
-            if(new Rectangle(getX(), getY() + velY, 32,32).intersects(block.getBounds())){
-                System.out.println("yes: blockY: " + block.getY() + " playerY: " + (getY()+velY+32));
+            if(new Rectangle(getX(), getY() + input.get("velY"), 32,32).intersects(block.getBounds())){
+                System.out.println("yes: blockY: " + block.getY() + " playerY: " + (getY()+input.get("velY")+32));
 //                velY = 0;
                 y = (int)lastBounds.getY();
+
             }
-            if(new Rectangle(getX()+velX, getY(), 32,32).intersects(block.getBounds())){ //if it would collide
-                System.out.println("yes: blockX: " + block.getX() + " playerX: " + (getX()+velX+32));
+            if(new Rectangle(getX()+input.get("velX"), getY(), 32,32).intersects(block.getBounds())){ //if it would collide
+                System.out.println("yes: blockX: " + block.getX() + " playerX: " + (getX()+input.get("velX")+32));
 //                velX = 0;
                 x = (int)lastBounds.getX();
             }
@@ -125,5 +134,13 @@ public class Player extends GameObject{
         return new Rectangle(x,y,32,32);
     }
 
+    @Override
+    public void setVelY(int vY) {
+        input.replace("velY", vY);
+    }
 
+    @Override
+    public void setVelX(int vX) {
+        input.replace("velX", vX);
+    }
 }
